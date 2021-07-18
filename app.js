@@ -15,7 +15,8 @@ const reviews = require("./routes/reviews");
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp", { 
 useUnifiedTopology: true,
-useNewUrlParser: true});
+useNewUrlParser: true,
+useFindAndModify: false});
 mongoose.set('useCreateIndex', true);
 
 //cehck if db is connected
@@ -32,7 +33,8 @@ app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({
     extended:true
 }));
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
+app.use(express.static('public'))
 
 const validateCampground = (req,res,next)=>{
     
