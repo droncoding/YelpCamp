@@ -3,6 +3,7 @@ const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError");
 const app = express();
 const session = require("express-session");
+const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const Campground = require("./models/campground");
@@ -35,7 +36,8 @@ app.use(bodyParser.urlencoded({
     extended:true
 }));
 app.use(methodOverride('_method'));
-app.use(express.static('public'))
+app.use(express.static('public'));
+app.use(flash());
 
 const validateCampground = (req,res,next)=>{
     
@@ -72,6 +74,12 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig))
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 app.use("/campgrounds", campgrounds)
 app.use("/campgrounds/:id/reviews", reviews)
