@@ -2,6 +2,7 @@ const express = require("express");
 const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError");
 const app = express();
+const session = require("express-session");
 const mongoose = require("mongoose");
 const methodOverride = require('method-override');
 const Campground = require("./models/campground");
@@ -58,6 +59,19 @@ const validateReview = (req,res,next)=>{
         next();
     }
 }
+
+const sessionConfig = {
+    secret:'Justasmallsecret',
+    resave:false,
+    saveUninitialized: true,
+    cookie:{
+        httpOnly:true,
+        expires: Date.now()+ 1000*60*60*24*7,
+        maxAge:1000*60*60*24*7
+    }
+}
+
+app.use(session(sessionConfig))
 
 app.use("/campgrounds", campgrounds)
 app.use("/campgrounds/:id/reviews", reviews)
