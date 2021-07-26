@@ -11,6 +11,9 @@ const Review = require("./models/review");
 const bodyParser = require("body-parser");
 const Joi = require("joi");
 const { campgroundSchema,reivewSchema } = require('./schemas');
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 
 const campgrounds = require("./routes/campground");
 const reviews = require("./routes/reviews");
@@ -37,7 +40,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
-app.use(flash());
+
 
 const validateCampground = (req,res,next)=>{
     
@@ -73,7 +76,10 @@ const sessionConfig = {
     }
 }
 
-app.use(session(sessionConfig))
+app.use(session(sessionConfig));
+app.use(flash());
+
+
 
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
@@ -83,6 +89,13 @@ app.use((req,res,next)=>{
 
 app.use("/campgrounds", campgrounds)
 app.use("/campgrounds/:id/reviews", reviews)
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/",(req,res)=>{
     res.render("home")
