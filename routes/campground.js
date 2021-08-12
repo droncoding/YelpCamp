@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require("multer");
+const upload = multer({dest:"uploads/"});
 const router = express.Router();
 const Campground = require("../models/campground");
 
