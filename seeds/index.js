@@ -38,7 +38,8 @@ const seedDB = async()=>{
                   url: 'https://res.cloudinary.com/dtem2v87n/image/upload/v1628908676/YelpCamp/t3chvwpkcz2tu9s2jzzr.jpg',
                   filename: 'YelpCamp/t3chvwpkcz2tu9s2jzzr'
                 }
-              ]
+              ],
+
         })
 
         await camp.save();
