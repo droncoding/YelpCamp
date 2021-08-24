@@ -29,6 +29,10 @@ const seedDB = async()=>{
             image:'https://source.unsplash.com/collection/483251',
             description:"sjadajda",
             price,
+            geometry:{
+              type: "Point",
+              coordinates:[-113.1331,47.0202]
+            },
             images:[
                 {
                   url: 'https://res.cloudinary.com/dtem2v87n/image/upload/v1628908676/YelpCamp/ab2mame5osdkogew0ift.jpg',
