@@ -33,20 +33,20 @@ paint: {
 'circle-color': [
 'step',
 ['get', 'point_count'],
-'#51bbd6',
-100,
-'#f1f075',
-750,
-'#f28cb1'
+'#95eab8',
+10,
+'#31873a',
+30,
+'#1F5B31'
 ],
 'circle-radius': [
 'step',
 ['get', 'point_count'],
+15,
+10,
 20,
-100,
 30,
-750,
-40
+25
 ]
 }
 });
