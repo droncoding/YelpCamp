@@ -52,28 +52,28 @@ paint: {
 });
  
 map.addLayer({
-id: 'cluster-count',
-type: 'symbol',
-source: 'campgrounds',
-filter: ['has', 'point_count'],
-layout: {
-'text-field': '{point_count_abbreviated}',
-'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-'text-size': 12
-}
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'campgrounds',
+    filter: ['has', 'point_count'],
+    layout: {
+    'text-field': '{point_count_abbreviated}',
+    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    'text-size': 12
+    }
 });
  
 map.addLayer({
-id: 'unclustered-point',
-type: 'circle',
-source: 'campgrounds',
-filter: ['!', ['has', 'point_count']],
-paint: {
-'circle-color': '#11b4da',
-'circle-radius': 4,
-'circle-stroke-width': 1,
-'circle-stroke-color': '#fff'
-}
+    id: 'unclustered-point',
+    type: 'circle',
+    source: 'campgrounds',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+    'circle-color': '#11b4da',
+    'circle-radius': 4,
+    'circle-stroke-width': 1,
+    'circle-stroke-color': '#fff'
+    }
 });
  
 // inspect a cluster on click
@@ -100,24 +100,20 @@ zoom: zoom
 // the location of the feature, with
 // description HTML from its properties.
 map.on('click', 'unclustered-point', (e) => {
-const coordinates = e.features[0].geometry.coordinates.slice();
-const mag = e.features[0].properties.mag;
-const tsunami =
-e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
- 
-// Ensure that if the map is zoomed out such that
-// multiple copies of the feature are visible, the
-// popup appears over the copy being pointed to.
-while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-}
- 
-new mapboxgl.Popup()
-.setLngLat(coordinates)
-.setHTML(
-`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
-)
-.addTo(map);
+    const { popUpMarkup } = e.features[0].properties;
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    
+    // Ensure that if the map is zoomed out such that
+    // multiple copies of the feature are visible, the
+    // popup appears over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+    
+    new mapboxgl.Popup()
+    .setLngLat(coordinates)
+    .setHTML(popUpMarkup)
+    .addTo(map);
 });
  
 map.on('mouseenter', 'clusters', () => {
