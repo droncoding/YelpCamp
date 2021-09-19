@@ -19,6 +19,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
+const mongoSanitize = require('express-mongo-sanitize');
+
 const campgroundRoutes = require("./routes/campground");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/user");
@@ -45,6 +47,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
+app.use(mongoSanitize());
 
 
 const validateCampground = (req,res,next)=>{
@@ -89,6 +92,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req,res,next)=>{
+
     res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
