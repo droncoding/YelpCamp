@@ -22,15 +22,23 @@ const helmet = require("helmet");
 
 const mongoSanitize = require('express-mongo-sanitize');
 
+
 const campgroundRoutes = require("./routes/campground");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/user");
+const MongoDBStore = require("connect-mongo");
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp", { 
-useUnifiedTopology: true,
-useNewUrlParser: true,
-useFindAndModify: false});
-mongoose.set('useCreateIndex', true);
+
+//const dbUrl = process.env.DB_URL;
+//"mongodb://localhost:27017/yelp-camp"
+const dbUrl = "mongodb://localhost:27017/yelp-camp";
+mongoose.connect(dbUrl, { 
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex:true,
+    useFindAndModify: false
+});
+
 
 //cehck if db is connected
 const db = mongoose.connection;
@@ -74,7 +82,18 @@ const validateReview = (req,res,next)=>{
     }
 }
 
+const store = new MongoDBStore({
+    mongoUrl:dbUrl,
+    secret: 'firstappisdevelopibf',
+    touchAfter: 24 * 60 *60
+});
+
+// store.on("error",function(e){
+//     console.log("SESSION STORE ERROR",e)
+// })
+
 const sessionConfig = {
+    //store,
     name: 'session',
     secret:'Justasmallsecret',
     resave:false,
